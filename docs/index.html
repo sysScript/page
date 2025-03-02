@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sysScript Wiki</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --light-bg: #f5f5f5;
+            --code-bg: #2d2d2d;
+            --code-color: #f8f8f2;
+            --border-color: #ddd;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        nav {
+            width: 250px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        nav h1 {
+            margin-top: 0;
+            font-size: 1.5em;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        nav li {
+            margin-bottom: 8px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--accent-color);
+        }
+        
+        nav .nav-section {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        nav .nav-subsection {
+            padding-left: 15px;
+            font-size: 0.9em;
+        }
+        
+        main {
+            flex: 1;
+            padding: 40px;
+            margin-left: 250px;
+            max-width: 900px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+        }
+        
+        .header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--secondary-color);
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: var(--light-bg);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .command {
+            background-color: var(--light-bg);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .command h3 {
+            margin-top: 0;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        
+        .example-code {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .warning {
+            background-color: #fee;
+            border-left: 4px solid #f56565;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            main {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <h1>sysScript Wiki</h1>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li class="nav-section">Key Features</li>
+                <li class="nav-subsection"><a href="#hardware-access">Direct Hardware Access</a></li>
+                <li class="nav-subsection"><a href="#memory-manipulation">Memory and Code Manipulation</a></li>
+                <li class="nav-subsection"><a href="#networking">Networking Capabilities</a></li>
+                <li class="nav-subsection"><a href="#security">Security and System Control</a></li>
+                <li class="nav-section">Command Reference</li>
+                <li class="nav-subsection"><a href="#basic-operations">Basic Operations</a></li>
+                <li class="nav-subsection"><a href="#memory-access">Memory Access</a></li>
+                <li class="nav-subsection"><a href="#hardware-control">Hardware Control</a></li>
+                <li class="nav-subsection"><a href="#bitwise-operations">Bitwise Operations</a></li>
+                <li class="nav-subsection"><a href="#advanced-commands">Advanced Commands</a></li>
+                <li class="nav-section">Examples</li>
+                <li class="nav-subsection"><a href="#hello-world">Hello World</a></li>
+                <li class="nav-subsection"><a href="#hardware-port">Hardware Port Example</a></li>
+                <li class="nav-subsection"><a href="#memory-example">Memory Manipulation</a></li>
+                <li class="nav-subsection"><a href="#gpu-example">GPU Pixel Drawing</a></li>
+                <li class="nav-section">Additional Information</li>
+                <li class="nav-subsection"><a href="#safety">Safety and Security</a></li>
+                <li class="nav-subsection"><a href="#building">Building from Source</a></li>
+                <li class="nav-subsection"><a href="#advanced-usage">Advanced Usage</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <section id="overview" class="section">
+                <div class="header">
+                    <h1>sysScript</h1>
+                    <p class="subtitle">A powerful low-level programming language for system programming and hardware manipulation</p>
+                </div>
+                
+                <p>sysScript is a powerful low-level programming language designed for direct hardware manipulation, system programming, and security research. It provides a unique blend of low-level access with high-level abstractions, allowing programmers to interact with hardware while maintaining a readable syntax.</p>
+            </section>
+            
+            <section id="key-features" class="section">
+                <h2>Key Features</h2>
+                
+                <div id="hardware-access" class="subsection">
+                    <h3>Direct Hardware Access</h3>
+                    <ul>
+                        <li><strong>CPU Register Manipulation</strong>: Directly read and write CPU registers using the <code>$</code> command</li>
+                        <li><strong>Memory-Mapped I/O</strong>: Access hardware devices through memory-mapped registers with the <code>%</code> command</li>
+                        <li><strong>Port I/O</strong>: Control hardware ports for legacy device communication using the <code>#</code> command</li>
+                        <li><strong>GPU Programming</strong>: Send commands directly to the GPU for hardware-accelerated operations</li>
+                    </ul>
+                </div>
+                
+                <div id="memory-manipulation" class="subsection">
+                    <h3>Memory and Code Manipulation</h3>
+                    <ul>
+                        <li><strong>Dynamic Memory Management</strong>: Allocate and free memory at runtime</li>
+                        <li><strong>Code Injection</strong>: Insert and modify executable code at runtime</li>
+                        <li><strong>JIT Compilation</strong>: Compile sysScript code to native machine code on-the-fly</li>
+                        <li><strong>Process Manipulation</strong>: Create processes and inject code into existing processes</li>
+                    </ul>
+                </div>
+                
+                <div id="networking" class="subsection">
+                    <h3>Networking Capabilities</h3>
+                    <ul>
+                        <li><strong>Raw Packet Crafting</strong>: Create network packets at the lowest level</li>
+                        <li><strong>Network Device Control</strong>: Directly manipulate network interface cards</li>
+                        <li><strong>Protocol Implementation</strong>: Build custom network protocols from scratch</li>
+                    </ul>
+                </div>
+                
+                <div id="security" class="subsection">
+                    <h3>Security and System Control</h3>
+                    <ul>
+                        <li><strong>Vulnerability Research</strong>: Tools for testing system security</li>
+                        <li><strong>System Call Interface</strong>: Execute privileged operations via system calls</li>
+                        <li><strong>Binary Patching</strong>: Modify running applications</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="command-reference" class="section">
+                <h2>Command Reference</h2>
+                
+                <div id="basic-operations" class="subsection">
+                    <h3>Basic Operations</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>+</code></td>
+                                <td>Increment value at pointer</td>
+                                <td><code>+</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>-</code></td>
+                                <td>Decrement value at pointer</td>
+                                <td><code>-</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&gt;</code></td>
+                                <td>Move pointer right</td>
+                                <td><code>&gt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>&lt;</code></td>
+                                <td>Move pointer left</td>
+                                <td><code>&lt;</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>[</code></td>
+                                <td>Start loop (if current value != 0)</td>
+                                <td><code>[&gt;+&lt;-]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>]</code></td>
+                                <td>End loop</td>
+                                <td><code>[&gt;+&lt;-]</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>.</code></td>
+                                <td>Output character at pointer</td>
+                                <td><code>.</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>,</code></td>
+                                <td>Input character to pointer</td>
+                                <td><code>,</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="memory-access" class="subsection">
+                    <h3>Memory Access</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>@addr</code></td>
+                                <td>Set memory pointer to address</td>
+                                <td><code>@1000</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>*</code></td>
+                                <td>Dereference pointer</td>
+                                <td><code>*</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>=value</code></td>
+                                <td>Set value at pointer</td>
+                                <td><code>=42</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>:label</code></td>
+                                <td>Define label</td>
+                                <td><code>:loop</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>;label</code></td>
+                                <td>Jump to label</td>
+                                <td><code>;loop</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="hardware-control" class="subsection">
+                    <h3>Hardware Control</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>#port[=value]</code></td>
+                                <td>Read/write hardware port</td>
+                                <td><code>#0x3F8=65</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>$reg[=value]</code></td>
+                                <td>Access CPU register</td>
+                                <td><code>$eax=42</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>%addr[=value]</code></td>
+                                <td>Access memory-mapped I/O</td>
+                                <td><code>%0xF000=1</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>!syscall</code></td>
+                                <td>Execute system call</td>
+                                <td><code>!0x80</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="bitwise-operations" class="subsection">
+                    <h3>Bitwise Operations</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>&amp;value</code></td>
+                                <td>Bitwise AND</td>
+                                <td><code>&amp;0x0F</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>|value</code></td>
+                                <td>Bitwise OR</td>
+                                <td><code>|0xF0</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>^value</code></td>
+                                <td>Bitwise XOR</td>
+                                <td><code>^0xFF</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>~</code></td>
+                                <td>Bitwise NOT</td>
+                                <td><code>~</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="advanced-commands" class="subsection">
+                    <h3>Advanced Commands</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>G{cmd,param,...}</code></td>
+                                <td>GPU command</td>
+                                <td><code>G{0x1234,0,640,480}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>M{addr,size,name}</code></td>
+                                <td>Map device</td>
+                                <td><code>M{0xF0000000,4096,gpu}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>I{addr,bytes...}</code></td>
+                                <td>Inject code</td>
+                                <td><code>I{0x400000,90,90,C3}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>N{iface,packet...}</code></td>
+                                <td>Send network packet</td>
+                                <td><code>N{eth0,FF,FF,FF,FF,FF,FF}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>J{code...}</code></td>
+                                <td>JIT compile code</td>
+                                <td><code>J{++++.}</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>D[0|1]</code></td>
+                                <td>Debug mode</td>
+                                <td><code>D1</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>X</code></td>
+                                <td>Execute machine code at pointer</td>
+                                <td><code>X</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>PC cmd</code></td>
+                                <td>Execute process</td>
+                                <td><code>PC ls -la</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>PI pid</code></td>
+                                <td>Process injection</td>
+                                <td><code>PI 1234</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>EA size</code></td>
+                                <td>Allocate memory</td>
+                                <td><code>EA 4096</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>EF</code></td>
+                                <td>Free memory</td>
+                                <td><code>EF</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>SC"string"</code></td>
+                                <td>Copy string to memory</td>
+                                <td><code>SC"Hello World"</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>SP</code></td>
+                                <td>Print string at pointer</td>
+                                <td><code>SP</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <section id="examples" class="section">
+                <h2>Example Programs</h2>
+                
+                <div id="hello-world" class="subsection">
+                    <h3>Hello World</h3>
+                    <pre><code>SC"Hello, World!"SP</code></pre>
+                    <p>This simple example copies the string "Hello, World!" to memory and then prints it.</p>
+                </div>
+                
+                <div id="hardware-port" class="subsection">
+                    <h3>Hardware Port Blinking LED (x86)</h3>
+                    <pre><code>:loop
+#0x378=1  // Turn on LED on parallel port (pin 2)
+=100[>+&lt;-]  // Delay
+#0x378=0  // Turn off LED
+=100[>+&lt;-]  // Delay
+;loop</code></pre>
+                    <p>This example toggles an LED connected to a parallel port (commonly found in older systems). It creates a simple blinking pattern by writing values to hardware port 0x378.</p>
+                </div>
+                
+                <div id="memory-example" class="subsection">
+                    <h3>Memory Manipulation</h3>
+                    <pre><code>@1000          // Set pointer to address 1000
+=72.>=101.>=108.>=108.>=111.> // Write "Hello"
+@1000          // Go back to beginning 
+[.>]           // Print until zero</code></pre>
+                    <p>This example demonstrates basic memory manipulation by writing ASCII values for "Hello" to sequential memory locations and then printing them out.</p>
+                </div>
+                
+                <div id="gpu-example" class="subsection">
+                    <h3>GPU Pixel Drawing Example</h3>
+                    <pre><code>// Map GPU framebuffer
+M{0xF0000000,8388608,gpufb}
+=0  // Store device ID at current pointer
+
+// Set color (ARGB)
+=255>
+=0>
+=0>
+=255>
+
+// Draw a pixel at (100,100)
+@100+100*800*4  // Calculate pixel address (y*width*bpp + x*bpp)
+%0=0xFF0000FF   // Write color to memory-mapped framebuffer</code></pre>
+                    <p>This advanced example shows how to interact with a GPU framebuffer to draw pixels directly. It maps the GPU memory and then calculates the position to place a red pixel at coordinates (100,100).</p>
+                </div>
+            </section>
+            
+            <section id="safety" class="section">
+                <h2>Safety and Security Considerations</h2>
+                <div class="warning">
+                    <p>sysScript provides powerful capabilities that can affect system stability if used incorrectly. Exercise caution when working with hardware directly.</p>
+                </div>
+                
+                <ul>
+                    <li><strong>Privileged Operations</strong>: Many commands require elevated privileges (root/admin) to work with real hardware</li>
+                    <li><strong>System Stability</strong>: Writing to arbitrary memory or hardware registers can crash your system</li>
+                    <li><strong>Security Implications</strong>: Code injection and process manipulation should be used only in controlled environments</li>
+                </ul>
+                
+                <p>For learning and experimentation, the interpreter defaults to a simulation mode that provides feedback without accessing real hardware.</p>
+            </section>
+            
+            <section id="building" class="section">
+                <h2>Building from Source</h2>
+                <pre><code># Standard build
+gcc -o sysScript sysScript.c
+
+# Build with real hardware access (use with caution)
+gcc -o sysScript -DENABLE_REAL_HARDWARE -DENABLE_GPU_ACCESS -DENABLE_CODE_INJECTION sysScript.c</code></pre>
+            </section>
+            
+            <section id="advanced-usage" class="section">
+                <h2>Advanced Usage</h2>
+                
+                <div class="subsection">
+                    <h3>Memory-Mapped Device Registration</h3>
+                    <p>To work with hardware devices through memory mapping:</p>
+                    <pre><code>// Map a device (e.g., a GPU framebuffer)
+M{0xF0000000,4096,gpufb}
+// The device ID is stored at the current pointer
+// Access the device with the % command
+%0=255  // Write to the first byte of the mapped device</code></pre>
+                </div>
+                
+                <div class="subsection">
+                    <h3>JIT Compilation</h3>
+                    <p>To improve performance for computationally intensive tasks:</p>
+                    <pre><code>// Define a function to be JIT compiled
+J{
+  // Factorial calculation
+  =1  // Initialize result to 1
+  >
+  =5  // Calculate factorial of 5
+  [
+    &lt;*>  // Multiply result by counter
+    -    // Decrement counter
+  ]
+  &lt;.    // Output result
+}</code></pre>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
