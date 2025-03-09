@@ -3854,6 +3854,7 @@ project "MyProject" {
                 });
             }
             
+            // Highlight active navigation item based on scroll position
             function setActiveNavItem() {
                 const sections = document.querySelectorAll('section[id]');
                 const navLinks = document.querySelectorAll('.nav-link');
@@ -3897,11 +3898,13 @@ project "MyProject" {
             }
         });
         
+        // Set GitHub repository URL
         const githubRepoUrl = 'https://github.com/CPScript/SystemScript';
         
-        // (Used to be the download URL but now will send you to the IDE wiki page which there you can download the IDE from thr same button)
+        // Set download URL for the latest release
         const downloadUrl = 'https://cpscript.github.io/SystemScript/IDE_wiki.html';
         
+        // Add click event listener for GitHub button
         if (githubButton) {
             githubButton.addEventListener('click', function() {
                 window.open(githubRepoUrl, '_blank');
@@ -3919,6 +3922,7 @@ project "MyProject" {
                 downloadLink.href = downloadUrl;
                 downloadLink.download = 'ssIDE.zip';
                 
+                // Append to body, click, and remove
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
