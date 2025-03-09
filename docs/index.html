@@ -3801,9 +3801,7 @@ project "MyProject" {
     </div>
     
     <script>
-        // Simple JavaScript to make dropdowns and other interactive elements work
         document.addEventListener('DOMContentLoaded', function() {
-            // Dropdown toggle functionality
             const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
             dropdownToggles.forEach(toggle => {
                 toggle.addEventListener('click', function() {
@@ -3812,7 +3810,6 @@ project "MyProject" {
                 });
             });
             
-            // Mobile menu toggle
             const navToggle = document.querySelector('.nav-toggle');
             const nav = document.getElementById('nav');
             if (navToggle) {
@@ -3821,7 +3818,6 @@ project "MyProject" {
                 });
             }
             
-            // Copy button functionality for code blocks
             const copyButtons = document.querySelectorAll('.copy-button');
             copyButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -3838,7 +3834,6 @@ project "MyProject" {
                 });
             });
             
-            // Dark mode toggle (simple implementation)
             const darkModeToggle = document.querySelector('.dark-mode-toggle');
             if (darkModeToggle) {
                 darkModeToggle.addEventListener('click', function() {
@@ -3854,7 +3849,6 @@ project "MyProject" {
                 });
             }
             
-            // Highlight active navigation item based on scroll position
             function setActiveNavItem() {
                 const sections = document.querySelectorAll('section[id]');
                 const navLinks = document.querySelectorAll('.nav-link');
@@ -3882,14 +3876,11 @@ project "MyProject" {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get all buttons with class "header-button"
         const headerButtons = document.querySelectorAll('.header-button');
         
-        // More reliable selection by checking content
         let downloadButton = null;
         let githubButton = null;
         
-        // Identify buttons by their content
         headerButtons.forEach(button => {
             if (button.textContent.includes('Download')) {
                 downloadButton = button;
@@ -3898,27 +3889,29 @@ project "MyProject" {
             }
         });
         
-        // Set GitHub repository URL
         const githubRepoUrl = 'https://github.com/CPScript/SystemScript';
         
-        // Set download URL for the latest release
         const downloadUrl = 'https://cpscript.github.io/SystemScript/IDE_wiki.html';
         
-        // Add click event listener for GitHub button
-        if (githubButton) {
-            githubButton.addEventListener('click', function() {
-                window.open(githubRepoUrl, '_blank');
-                console.log('Opening GitHub repo:', githubRepoUrl);
-            });
-        } else {
-            console.error('GitHub button not found');
-        }
-
-        // Add click event listener for Dowanload button
         if (downloadButton) {
             downloadButton.addEventListener('click', function() {
-                window.open(downloadUrl, '_blank');
+                window.location.href = downloadUrl;
                 console.log('Switching page:', downloadUrl);
+            });
+        } else {
+            console.error('Download button not found');
+        }
+        
+        if (downloadButton) {
+            downloadButton.addEventListener('click', function() {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = 'ssIDE.zip';
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                console.log('Downloading from:', downloadUrl);
             });
         } else {
             console.error('Download button not found');
