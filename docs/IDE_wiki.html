@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SystemScript IDE Documentation Wiki</title>
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #0f3460;
+            --accent-light: #4361ee;
+            --accent-hover: #536dfe;
+            --text-color: #e7e7e7;
+            --text-muted: #a2a2a2;
+            --dark-bg: #0f0f1a;
+            --card-bg: #1f1f3a;
+            --code-bg: #151528;
+            --code-color: #f8f8f2;
+            --border-color: #2a294e;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --danger-color: #f44336;
+            --header-height: 60px;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+            --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--dark-bg);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--accent-light);
+            transition: var(--transition);
+        }
+        
+        .container {
+            display: flex;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--primary-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .header-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-logo span {
+            background: linear-gradient(135deg, var(--accent-light), #7b68ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-left: 6px;
+        }
+        
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 16px;
+        }
+        
+        .header-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header-button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .header-button i {
+            font-size: 1rem;
+        }
+        
+        nav {
+            width: 280px;
+            background-color: var(--primary-color);
+            position: fixed;
+            height: calc(100vh - var(--header-height));
+            top: var(--header-height);
+            left: 0;
+            overflow-y: auto;
+            padding: 24px 0;
+            box-shadow: var(--shadow-md);
+            z-index: 900;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--primary-color);
+        }
+        
+        nav::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        nav::-webkit-scrollbar-track {
+            background: var(--primary-color);
+        }
+        
+        nav::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 20px;
+        }
+        
+        nav ul {
+            list-style: none;
+            padding: 0 16px;
+        }
+        
+        nav .nav-section {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 24px;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            font-weight: 600;
+        }
+        
+        nav .nav-section:first-child {
+            margin-top: 0;
+        }
+        
+        nav .nav-item {
+            margin-bottom: 2px;
+        }
+        
+        nav .nav-link {
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        
+        nav .nav-link:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        nav .nav-link.active {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 500;
+        }
+        
+        nav .nav-subsection {
+            padding-left: 16px;
+        }
+        
+        nav .nav-subsection .nav-link {
+            font-size: 0.9rem;
+            padding: 6px 16px;
+        }
+        
+        .dropdown {
+            position: relative;
+        }
+        
+        .dropdown-toggle {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .dropdown-toggle::after {
+            content: '▼';
+            font-size: 0.6rem;
+            margin-left: 8px;
+            transition: var(--transition);
+        }
+        
+        .dropdown.open .dropdown-toggle::after {
+            transform: rotate(180deg);
+        }
+        
+        .dropdown-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .dropdown.open .dropdown-menu {
+            max-height: 1000px; 
+            transition: max-height 0.5s ease-in;
+        }
+        
+        main {
+            flex: 1;
+            padding: 40px;
+            margin-left: 280px;
+            margin-top: var(--header-height);
+            max-width: 1000px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .section-header:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent-light), var(--accent-hover));
+            border-radius: 3px;
+        }
+        
+        .section-header h1 {
+            margin-bottom: 16px;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #fff, var(--accent-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--text-color);
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+            line-height: 1.3;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-top: 2.5rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+        }
+        
+        h4 {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            overflow-x: auto;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .copy-button {
+            background-color: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        
+        .copy-button:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 24px 0;
+            box-shadow: var(--shadow-md);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: var(--secondary-color);
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tbody tr {
+            background-color: var(--card-bg);
+            transition: var(--transition);
+        }
+        
+        tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-light);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+        
+        ul, ol {
+            padding-left: 24px;
+            margin-bottom: 24px;
+        }
+        
+        ul li, ol li {
+            margin-bottom: 8px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            margin-right: 12px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-light);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .alert {
+            border-radius: var(--border-radius);
+            padding: 16px 20px;
+            margin: 24px 0;
+            position: relative;
+            border-left: 5px solid transparent;
+            background-color: var(--card-bg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .alert-warning {
+            border-color: var(--warning-color);
+        }
+        
+        .alert-danger {
+            border-color: var(--danger-color);
+        }
+        
+        .alert-info {
+            border-color: var(--accent-light);
+        }
+        
+        .alert-success {
+            border-color: var(--success-color);
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+        
+        .tag:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        .highlight .keyword { color: #ff79c6; }
+        .highlight .string { color: #f1fa8c; }
+        .highlight .comment { color: #6272a4; }
+        .highlight .function { color: #50fa7b; }
+        .highlight .number { color: #bd93f9; }
+        .highlight .operator { color: #ff79c6; }
+        .highlight .class { color: #8be9fd; }
+        
+        @media (max-width: 1200px) {
+            main {
+                padding: 30px;
+                max-width: 100%;
+            }
+        }
+        
+        
+        @media (max-width: 768px) {
+            nav {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                width: 260px;
+            }
+            
+            nav.open {
+                transform: translateX(0);
+            }
+            
+            main {
+                margin-left: 0;
+            }
+            
+            .nav-toggle {
+                display: block;
+            }
+            
+        }
+        
+        .nav-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 16px;
+            display: none;
+        }
+        
+        .mt-0 { margin-top: 0 !important; }
+        .mb-0 { margin-bottom: 0 !important; }
+        .text-center { text-align: center; }
+        .d-flex { display: flex; }
+        .align-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .flex-wrap { flex-wrap: wrap; }
+        .gap-2 { gap: 8px; }
+        .gap-4 { gap: 16px; }
+        
+        .code-comment { color: #6272a4; }
+        .code-keyword { color: #ff79c6; font-weight: bold; }
+        .code-string { color: #f1fa8c; }
+        .code-number { color: #bd93f9; }
+        .code-function { color: #50fa7b; }
+        .code-type { color: #8be9fd; }
+        .code-operator { color: #ff79c6; }
+        .code-variable { color: #f8f8f2; }
+        .code-punctuation { color: #f8f8f2; }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .dark-mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .icon-menu::before { content: '☰'; }
+        .icon-download::before { content: '⬇'; }
+        .icon-github::before { content: '⚙'; }
+        .icon-moon::before { content: '☾'; }
+        .icon-sun::before { content: '☀'; }
+        .icon-code::before { content: '</>'; }
+        .icon-copy::before { content: '📋'; }
+        
+        .progress-bar {
+            height: 3px;
+            background: linear-gradient(to right, var(--accent-light), var(--accent-hover));
+            width: 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            animation: progress 6s ease-out;
+        }
+        
+        @keyframes progress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        
+        .interactive-demo {
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin: 24px 0;
+        }
+        
+        .demo-header {
+            background-color: var(--secondary-color);
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .demo-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .demo-content {
+            padding: 16px;
+            background-color: var(--card-bg);
+        }
+        
+        .demo-output {
+            padding: 16px;
+            background-color: var(--code-bg);
+            border-top: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            min-height: 60px;
+        }
+
+        .screenshot {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            margin: 20px 0;
+        }
+
+        .keyboard-shortcut {
+            display: inline-block;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            box-shadow: var(--shadow-sm);
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <span class="icon-menu"></span>
+        </button>
+        <div class="header-logo">
+            System<span>Script IDE</span>
+        </div>
+        <div class="header-actions">
+            <button class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <span class="icon-moon"></span>
+            </button>
+            <button class="header-button">
+                <span class="icon-download"></span> Download IDE (V: beta.2.0)
+            </button>
+            <button class="header-button">
+                <span class="icon-github"></span> GitHub
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav id="nav">
+            <ul>
+                <li class="nav-section">Getting Started</li>
+                <li class="nav-item"><a href="#introduction" class="nav-link">Introduction</a></li>
+                <li class="nav-item"><a href="#installation" class="nav-link">Installation</a></li>
+                <li class="nav-item"><a href="#interface-overview" class="nav-link">Interface Overview</a></li>
+                
+                <li class="nav-section">Core Features</li>
+                <li class="nav-item dropdown">
+                    <a href="#editor" class="nav-link dropdown-toggle">Code Editor</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item nav-subsection"><a href="#syntax-highlighting" class="nav-link">Syntax Highlighting</a></li>
+                        <li class="nav-item nav-subsection"><a href="#code-completion" class="nav-link">Code Completion</a></li>
+                        <li class="nav-item nav-subsection"><a href="#code-folding" class="nav-link">Code Folding</a></li>
+                        <li class="nav-item nav-subsection"><a href="#search-replace" class="nav-link">Search & Replace</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#projects" class="nav-link dropdown-toggle">Project Management</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item nav-subsection"><a href="#creating-projects" class="nav-link">Creating Projects</a></li>
+                        <li class="nav-item nav-subsection"><a href="#project-structure" class="nav-link">Project Structure</a></li>
+                        <li class="nav-item nav-subsection"><a href="#managing-files" class="nav-link">Managing Files</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a href="#build-run" class="nav-link dropdown-toggle">Build & Run</a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item nav-subsection"><a href="#compiler-settings" class="nav-link">Compiler Settings</a></li>
+                        <li class="nav-item nav-subsection"><a href="#building-projects" class="nav-link">Building Projects</a></li>
+                        <li class="nav-item nav-subsection"><a href="#running-projects" class="nav-link">Running Projects</a></li>
+                        <li class="nav-item nav-subsection"><a href="#debugging" class="nav-link">Debugging</a></li>
+                    </ul>
+                </li>
+                
+                <li class="nav-section">Advanced Features</li>
+                <li class="nav-item"><a href="#settings-configuration" class="nav-link">Settings & Configuration</a></li>
+                <li class="nav-item"><a href="#keyboard-shortcuts" class="nav-link">Keyboard Shortcuts</a></li>
+                <li class="nav-item"><a href="#plugins" class="nav-link">Plugins</a></li>
+                <li class="nav-item"><a href="#snippets" class="nav-link">Code Snippets</a></li>
+                
+                <li class="nav-section">Troubleshooting</li>
+                <li class="nav-item"><a href="#common-issues" class="nav-link">Common Issues</a></li>
+                <li class="nav-item"><a href="#error-codes" class="nav-link">Error Codes</a></li>
+                <li class="nav-item"><a href="#performance-tips" class="nav-link">Performance Tips</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <div class="section">
+                <div class="section-header">
+                    <h1 id="introduction">SystemScript IDE</h1>
+                    <p class="subtitle">A BETA development environment for the SystemScript programming language</p>
+                </div>
+                
+                <p>
+                    SystemScript IDE is a BETA "Integrated Development Environment" specifically designed for SystemScript language development. It combines code editing capabilities with robust project management tools, making it ideal for everything from small scripts to complex system-level applications.
+                </p>
+                
+                <div class="card">
+                    <h3>Key Features</h3>
+                    <ul>
+                        <li><strong>Modern Editor:</strong> Advanced syntax highlighting, code completion, and error detection</li>
+                        <li><strong>Project Management:</strong> Organize files with intuitive project structures and templates</li>
+                        <li><strong>Integrated Build Tools:</strong> Compile and run SystemScript code directly from the IDE</li>
+                        <li><strong>Debugging:</strong> Step through code, inspect variables, and analyze execution flow</li>
+                        <li><strong>Customizable Interface:</strong> Dark mode, themes, and layout options to suit your workflow</li>
+                        <li><strong>Plugin System:</strong> Extend functionality with community-created plugins</li>
+                    </ul>
+                </div>
+                
+                <div class="alert alert-info">
+                    <p><strong>Version Information:</strong> This documentation covers SystemScript IDE version 2.0.0. Features may vary in different versions.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 id="installation">Installation</h2>
+                
+                <p>SystemScript IDE is available for Windows, macOS, and Linux. Choose the appropriate installation method for your platform.</p>
+                <p>[NOTICE] The current IDE is in beta and will not be compiled untill the first "out-of-beta" release. For now please install it using the "Download" button in the top right of your screen.</p>
+                <h3>System Requirements</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Minimum</th>
+                            <th>Recommended</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Operating System</td>
+                            <td>Windows 10, macOS 10.14, Ubuntu 18.04</td>
+                            <td>Windows 10/11, macOS 12+, Ubuntu 20.04+</td>
+                        </tr>
+                        <tr>
+                            <td>CPU</td>
+                            <td>Dual-core 1.8 GHz</td>
+                            <td>Quad-core 2.5+ GHz</td>
+                        </tr>
+                        <tr>
+                            <td>RAM</td>
+                            <td>4 GB</td>
+                            <td>8+ GB</td>
+                        </tr>
+                        <tr>
+                            <td>Storage</td>
+                            <td>500 MB free space</td>
+                            <td>1+ GB free space</td>
+                        </tr>
+                        <tr>
+                            <td>Display</td>
+                            <td>1280x720 resolution</td>
+                            <td>1920x1080 or higher</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Windows Installation (Do Not Follow)</h3>
+                <ol>
+                    <li>Download the installer from the <a href="#">official website</a></li>
+                    <li>Run the <code>SystemScriptIDE-Setup.exe</code> file</li>
+                    <li>Follow the installation wizard prompts</li>
+                    <li>Choose your installation directory and preferred options</li>
+                    <li>Complete the installation and launch the IDE</li>
+                </ol>
+                
+                <h3>macOS Installation (Do Not Follow)</h3>
+                <ol>
+                    <li>Download the <code>.dmg</code> file from the <a href="#">official website</a></li>
+                    <li>Open the downloaded disk image</li>
+                    <li>Drag the SystemScript IDE application to your Applications folder</li>
+                    <li>Right-click the application and select "Open" to bypass Gatekeeper on first launch</li>
+                </ol>
+                
+                <h3>Linux Installation (Do Not Follow)</h3>
+                <h4>Debian/Ubuntu-based distributions:</h4>
+                <pre><code>sudo apt update
+sudo apt install ./systemscript-ide_2.0.0_amd64.deb</code></pre>
+
+                <h4>Red Hat/Fedora-based distributions:</h4>
+                <pre><code>sudo dnf install ./systemscript-ide-2.0.0.x86_64.rpm</code></pre>
+
+                <h4>Using AppImage:</h4>
+                <ol>
+                    <li>Download the <code>.AppImage</code> file from the <a href="#">official website</a></li>
+                    <li>Make the file executable: <code>chmod +x SystemScriptIDE-2.0.0.AppImage</code></li>
+                    <li>Run the file: <code>./SystemScriptIDE-2.0.0.AppImage</code></li>
+                </ol>
+
+                <h3>Verifying Installation</h3>
+                <p>
+                    After installation, launch SystemScript IDE to verify it's working correctly. The first launch may take slightly longer as the IDE initializes configuration files and checks for updates.
+                </p>
+            </div>
+            
+            <div class="section">
+                <h2 id="interface-overview">Interface Overview</h2>
+                
+                <p>
+                    SystemScript IDE features a modern, intuitive interface designed to maximize productivity. Familiarize yourself with the key interface components to get the most out of the IDE.
+                </p>
+                
+                <div class="card">
+                    <h3>Main Interface Components</h3>
+                    <ul>
+                        <li><strong>Menu Bar</strong>: Contains File, Edit, View, Build, Tools, and Help menus</li>
+                        <li><strong>Toolbar</strong>: Quick access to common actions like build, run, and save</li>
+                        <li><strong>Project Explorer</strong>: Tree view of your project files and structure</li>
+                        <li><strong>Editor Area</strong>: Main coding workspace with tabs for multiple files</li>
+                        <li><strong>Output Panel</strong>: Shows compilation results, errors, and program output</li>
+                        <li><strong>Status Bar</strong>: Displays current position, encoding, and other information</li>
+                    </ul>
+                </div>
+
+                <h3>Welcome Screen</h3>
+                <p>
+                    When you first launch SystemScript IDE or when no projects are open, you'll see the Welcome Screen, which offers:
+                </p>
+                <ul>
+                    <li>Quick links to create new projects or files</li>
+                    <li>Open existing projects</li>
+                    <li>Access to recent projects</li>
+                    <li>Documentation and learning resources</li>
+                </ul>
+
+                <h3>Dark Theme and UI Customization (Other themes have not yet been implemented)</h3>
+                <p>
+                    SystemScript IDE comes with a modern dark theme by default, optimized for reduced eye strain during long coding sessions. You can customize the UI through the Settings dialog:
+                </p>
+                <ol>
+                    <li>Select <code>Tools → Settings</code> from the menu bar</li>
+                    <li>Navigate to the <code>Appearance</code> tab</li>
+                    <li>Choose from available themes or customize colors</li>
+                </ol>
+
+                <h3>Docking and Layout</h3>
+                <p>
+                    The IDE interface supports flexible docking and window arrangements:
+                </p>
+                <ul>
+                    <li>Drag and drop panels by their title bar to reposition them</li>
+                    <li>Panels can be docked to any side of the main window</li>
+                    <li>Right-click a panel's title bar for additional options</li>
+                    <li>Double-click a panel's title bar to maximize or restore it</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2 id="editor">Code Editor</h2>
+                
+                <p>
+                    The code editor is the core component of SystemScript IDE, providing advanced editing capabilities specifically tailored for SystemScript development.
+                </p>
+                
+                <h3 id="syntax-highlighting">Syntax Highlighting</h3>
+                <p>
+                    The editor automatically highlights SystemScript syntax elements to improve code readability:
+                </p>
+                <ul>
+                    <li>Keywords: <span style="color: #ff79c6;">module</span>, <span style="color: #ff79c6;">import</span>, <span style="color: #ff79c6;">fn</span>, <span style="color: #ff79c6;">struct</span>, etc.</li>
+                    <li>Types: <span style="color: #8be9fd;">i32</span>, <span style="color: #8be9fd;">f64</span>, <span style="color: #8be9fd;">bool</span>, <span style="color: #8be9fd;">str</span>, etc.</li>
+                    <li>Functions: <span style="color: #50fa7b;">println</span>, <span style="color: #50fa7b;">calculate</span>, etc.</li>
+                    <li>Strings: <span style="color: #f1fa8c;">"Hello, World!"</span></li>
+                    <li>Comments: <span style="color: #6272a4;">// This is a comment</span></li>
+                    <li>Numbers: <span style="color: #bd93f9;">42</span>, <span style="color: #bd93f9;">3.14</span></li>
+                </ul>
+
+                <div class="interactive-demo">
+                    <div class="demo-header">
+                        <div class="demo-title">Syntax Highlighting Example</div>
+                    </div>
+                    <div class="demo-content">
+                        <pre><code><span class="code-comment">// SystemScript example</span>
+<span class="code-keyword">module</span> main;
+
+<span class="code-keyword">import</span> system.io;
+
+<span class="code-keyword">fn</span> <span class="code-function">calculate</span>(x: <span class="code-type">i32</span>, y: <span class="code-type">i32</span>) <span class="code-operator">-></span> <span class="code-type">i32</span> {
+    <span class="code-keyword">const</span> result: <span class="code-type">i32</span> <span class="code-operator">=</span> x <span class="code-operator">*</span> y <span class="code-operator">+</span> <span class="code-number">42</span>;
+    <span class="code-keyword">if</span> (result <span class="code-operator">></span> <span class="code-number">100</span>) {
+        io.<span class="code-function">println</span>(<span class="code-string">"Large result: "</span> <span class="code-operator">+</span> result);
+    }
+    <span class="code-keyword">return</span> result;
+}
+
+<span class="code-keyword">fn</span> <span class="code-function">main</span>() <span class="code-operator">-></span> <span class="code-type">i32</span> {
+    <span class="code-keyword">const</span> a: <span class="code-type">i32</span> <span class="code-operator">=</span> <span class="code-number">10</span>;
+    <span class="code-keyword">const</span> b: <span class="code-type">i32</span> <span class="code-operator">=</span> <span class="code-number">20</span>;
+    <span class="code-keyword">return</span> <span class="code-function">calculate</span>(a, b);
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3 id="code-completion">Code Completion (AI code completion has not been implemented)</h3>
+                <p>
+                    The IDE provides intelligent code completion to speed up your coding workflow:
+                </p>
+                <ul>
+                    <li><strong>Automatic Suggestions</strong>: As you type, the editor shows relevant completion options</li>
+                    <li><strong>Context-Aware Completion</strong>: Suggestions are based on current code context</li>
+                    <li><strong>Module Completion</strong>: Automatically suggests available module imports</li>
+                    <li><strong>Function Parameter Hints</strong>: Displays parameter types and names</li>
+                </ul>
+                
+                <p>
+                    Trigger code completion manually with <span class="keyboard-shortcut">Ctrl+Space</span> or configure it to appear automatically after you type specific characters.
+                </p>
+
+                <h3 id="code-folding">Code Folding</h3>
+                <p>
+                    Code folding allows you to collapse blocks of code to focus on specific sections:
+                </p>
+                <ul>
+                    <li>Click the <strong>-</strong> symbol in the gutter to collapse a code block</li>
+                    <li>Click the <strong>+</strong> symbol to expand a collapsed block</li>
+                    <li>Use <span class="keyboard-shortcut">Ctrl+Shift+[</span> to collapse and <span class="keyboard-shortcut">Ctrl+Shift+]</span> to expand</li>
+                    <li>Right-click in the gutter for additional folding options</li>
+                </ul>
+
+                <h3 id="search-replace">Search & Replace</h3>
+                <p>
+                    The IDE offers powerful search and replace functionality:
+                </p>
+
+                <h4>Single File Search</h4>
+                <ul>
+                    <li>Press <span class="keyboard-shortcut">Ctrl+F</span> to open the search dialog</li>
+                    <li>Press <span class="keyboard-shortcut">Ctrl+H</span> for search and replace</li>
+                    <li>Options include case sensitivity, whole word matching, and regular expressions</li>
+                    <li>Use <span class="keyboard-shortcut">F3</span> to find next and <span class="keyboard-shortcut">Shift+F3</span> to find previous</li>
+                </ul>
+
+                <h4>Project-Wide Search</h4>
+                <ul>
+                    <li>Press <span class="keyboard-shortcut">Ctrl+Shift+F</span> to search across all project files</li>
+                    <li>Results appear in the Output panel with links to matching locations</li>
+                    <li>Filter search by file types or specific directories</li>
+                    <li>Replace across multiple files with <span class="keyboard-shortcut">Ctrl+Shift+H</span></li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2 id="projects">Project Management</h2>
+                
+                <p>
+                    SystemScript IDE provides comprehensive project management features to organize and structure your SystemScript code efficiently.
+                </p>
+                
+                <h3 id="creating-projects">Creating Projects</h3>
+                
+                <h4>Creating a New Project</h4>
+                <ol>
+                    <li>Select <code>File → New Project</code> from the menu bar</li>
+                    <li>Choose a project template from the available options</li>
+                    <li>Enter the project name and select the location</li>
+                    <li>Configure additional project settings if needed</li>
+                    <li>Click <strong>Finish</strong> to create the project</li>
+                </ol>
+
+                <h4>Available Project Templates</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Template</th>
+                            <th>Description</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Empty Project</td>
+                            <td>Basic project with minimal structure</td>
+                            <td>General-purpose development</td>
+                        </tr>
+                        <tr>
+                            <td>Library Project</td>
+                            <td>Setup for creating reusable libraries</td>
+                            <td>When building code for reuse across projects</td>
+                        </tr>
+                        <tr>
+                            <td>Network Application</td>
+                            <td>Pre-configured for network functionality</td>
+                            <td>Network services, clients, protocols</td>
+                        </tr>
+                        <tr>
+                            <td>GUI Application</td>
+                            <td>Template with GUI components</td>
+                            <td>Desktop applications with interfaces</td>
+                        </tr>
+                        <tr>
+                            <td>Game Application</td>
+                            <td>Setup with game loop and rendering</td>
+                            <td>Game development projects</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="project-structure">Project Structure</h3>
+                <p>
+                    SystemScript IDE projects follow a standardized directory structure:
+                </p>
+                <pre><code>MyProject/
+├── src/                 # Source code directory
+│   └── main.ss          # Main SystemScript file
+├── build/               # Build output directory
+├── docs/                # Documentation directory
+├── libs/                # External libraries
+├── tests/               # Unit tests
+├── resources/           # Project resources
+└── project.json         # Project configuration file</code></pre>
+
+                <div class="alert alert-info">
+                    <p><strong>Project Configuration:</strong> The <code>project.json</code> file contains all project settings and can be edited directly or through the project properties dialog.</p>
+                </div>
+
+                <h3 id="managing-files">Managing Files</h3>
+                
+                <h4>Creating New Files</h4>
+                <ol>
+                    <li>Right-click on a directory in the Project Explorer</li>
+                    <li>Select <code>New File</code> from the context menu</li>
+                    <li>Enter the file name with the appropriate extension</li>
+                    <li>Choose a file template if prompted</li>
+                </ol>
+
+                <h4>Importing Existing Files</h4>
+                <ol>
+                    <li>Right-click on the target directory in the Project Explorer</li>
+                    <li>Select <code>Import Files...</code> from the context menu</li>
+                    <li>Browse and select the files to import</li>
+                    <li>Choose whether to copy or link the files</li>
+                </ol>
+
+                <h4>Project Navigation</h4>
+                <ul>
+                    <li>Use the Project Explorer to browse the project structure</li>
+                    <li>Double-click files to open them in the editor</li>
+                    <li>Right-click for context-specific actions</li>
+                    <li>Use <span class="keyboard-shortcut">Ctrl+Shift+N</span> to quickly navigate to any file</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2 id="build-run">Build & Run</h2>
+                
+                <p>
+                    SystemScript IDE integrates tightly with the SystemScript compiler, allowing you to build and run your code directly from the IDE.
+                </p>
+                
+                <h3 id="compiler-settings">Compiler Settings</h3>
+                <p>
+                    Configure the compiler through the Settings dialog:
+                </p>
+                <ol>
+                    <li>Select <code>Tools → Settings</code> from the menu bar</li>
+                    <li>Navigate to the <code>Compiler</code> tab</li>
+                    <li>Configure compiler path, build flags, and other options</li>
+                </ol>
+
+                <h4>Built-in vs External Compiler</h4>
+                <p>
+                    SystemScript IDE offers two compiler options:
+                </p>
+                <ul>
+                    <li><strong>Built-in Compiler</strong>: Included with the IDE, provides basic functionality without external dependencies</li>
+                    <li><strong>External Compiler</strong>: More powerful, supports advanced optimizations and features</li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <p>For production use or advanced features, we recommend configuring an external compiler. The built-in compiler is suitable for learning and simple projects.</p>
+                </div>
+
+                <h4>Common Build Flags</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Flag</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>--optimize</code></td>
+                            <td>Enable performance optimizations</td>
+                        </tr>
+                        <tr>
+                            <td><code>--debug</code></td>
+                            <td>Include debug information in the output</td>
+                        </tr>
+                        <tr>
+                            <td><code>--warnings</code></td>
+                            <td>Show additional warnings during compilation</td>
+                        </tr>
+                        <tr>
+                            <td><code>--werror</code></td>
+                            <td>Treat warnings as errors</td>
+                        </tr>
+                        <tr>
+                            <td><code>--strict</code></td>
+                            <td>Enable strict type checking</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 id="building-projects">Building Projects</h3>
+                <p>
+                    There are several ways to build your SystemScript project:
+                </p>
+                
+                <h4>Building a Single File</h4>
+                <ol>
+                    <li>Open the file in the editor</li>
+                    <li>Press <span class="keyboard-shortcut">F7</span> or click the <strong>Build</strong> button in the toolbar</li>
+                    <li>View build results in the Output panel</li>
+                </ol>
+
+                <h4>Building an Entire Project</h4>
+                <ol>
+                    <li>Press <span class="keyboard-shortcut">Ctrl+F7</span> or select <code>Build → Build Project</code> from the menu</li>
+                    <li>The IDE will build the main file and all dependencies</li>
+                    <li>Output files are placed in the project's build directory</li>
+                </ol>
+
+                <div class="alert alert-warning">
+                    <p><strong>Note:</strong> SystemScript IDE automatically saves all modified files before building to ensure the latest changes are compiled.</p>
+                </div>
+
+                <h3 id="running-projects">Running Projects</h3>
+                <p>
+                    After a successful build, you can run your SystemScript application:
+                </p>
+                
+                <h4>Running the Current File</h4>
+                <ol>
+                    <li>Press <span class="keyboard-shortcut">F5</span> or click the <strong>Run</strong> button in the toolbar</li>
+                    <li>If the file hasn't been built yet, the IDE will build it first</li>
+                    <li>Program output appears in the Output panel</li>
+                </ol>
+
+                <h4>Run Configuration Options</h4>
+                <p>
+                    Configure how your application runs through <code>Build → Run Configuration</code>:
+                </p>
+                <ul>
+                    <li>Set command-line arguments</li>
+                    <li>Configure environment variables</li>
+                    <li>Specify working directory</li>
+                    <li>Set up external terminal options</li>
+                </ul>
+
+                <h3 id="debugging">Debugging</h3>
+                <p>
+                    SystemScript IDE includes a powerful debugger for analyzing and fixing issues:
+                </p>
+                
+                <h4>Starting a Debug Session</h4>
+                <ol>
+                    <li>Set breakpoints by clicking in the gutter next to line numbers</li>
+                    <li>Press <span class="keyboard-shortcut">F9</span> or select <code>Build → Debug</code> from the menu</li>
+                    <li>The program will run until it hits a breakpoint</li>
+                </ol>
+
+                <h4>Debugging Controls</h4>
+                <ul>
+                    <li><span class="keyboard-shortcut">F9</span>: Start/continue debugging</li>
+                    <li><span class="keyboard-shortcut">F8</span>: Step over (execute current line without stepping into functions)</li>
+                    <li><span class="keyboard-shortcut">F7</span>: Step into (follow execution into functions)</li>
+                    <li><span class="keyboard-shortcut">Shift+F8</span>: Step out (continue until current function returns)</li>
+                    <li><span class="keyboard-shortcut">Shift+F5</span>: Stop debugging</li>
+                </ul>
+
+                <h4>Debug Views</h4>
+                <p>
+                    While debugging, additional panels become available:
+                </p>
+                <ul>
+                    <li><strong>Variables</strong>: Shows current variable values</li>
+                    <li><strong>Call Stack</strong>: Displays the execution call hierarchy</li>
+                    <li><strong>Breakpoints</strong>: Lists and manages all breakpoints</li>
+                    <li><strong>Watch</strong>: Monitors custom expressions during execution</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2 id="settings-configuration">Settings & Configuration</h2>
+                
+                <p>
+                    SystemScript IDE offers extensive customization options to tailor the environment to your preferences.
+                </p>
+                
+                <h3>Accessing Settings</h3>
+                <p>
+                    Open the Settings dialog through:
+                </p>
+                <ul>
+                    <li><code>Tools → Settings</code> in the menu bar</li>
+                    <li>The <span class="keyboard-shortcut">Ctrl+Alt+S</span> shortcut</li>
+                </ul>
+
+                <h3>Editor Preferences</h3>
+                <p>
+                    Customize the code editor behavior through the <code>Editor</code> tab:
+                </p>
+                <ul>
+                    <li><strong>Font</strong>: Change font family and size</li>
+                    <li><strong>Indentation</strong>: Set tab size and choose spaces vs. tabs</li>
+                    <li><strong>Line Numbers</strong>: Show/hide line numbers</li>
+                    <li><strong>Code Folding</strong>: Enable/disable code folding features</li>
+                    <li><strong>Auto-completion</strong>: Configure intelligence and trigger behavior</li>
+                    <li><strong>Auto-saving</strong>: Enable automatic file saving</li>
+                </ul>
+
+                <h3>Appearance Settings</h3>
+                <p>
+                    Customize the IDE's look and feel through the <code>Appearance</code> tab:
+                </p>
+                <ul>
+                    <li><strong>Theme</strong>: Choose between dark and light themes</li>
+                    <li><strong>UI Style</strong>: Select from IntelliJ, Modern, Classic, or System Native styles</li>
+                    <li><strong>Syntax Highlighting</strong>: Customize code colors</li>
+                    <li><strong>Welcome Screen</strong>: Show/hide the welcome screen when no files are open</li>
+                </ul>
+
+                <h3>Saving and Exporting Settings</h3>
+                <p>
+                    Your settings can be backed up and transferred between installations:
+                </p>
+                <ul>
+                    <li>Settings are stored in <code>~/.systemscript-ide/config.json</code></li>
+                    <li>Use <code>Export Settings</code> in the Settings dialog to save settings to a file</li>
+                    <li>Use <code>Import Settings</code> to load settings from a file</li>
+                </ul>
+
+                <div class="alert alert-info">
+                    <p><strong>Note:</strong> Some settings require a restart to take effect. The IDE will notify you when this is necessary.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 id="keyboard-shortcuts">Keyboard Shortcuts</h2>
+                
+                <p>
+                    SystemScript IDE offers a comprehensive set of keyboard shortcuts to boost your productivity.
+                </p>
+                
+                <h3>Essential Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Shortcut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>New File</td>
+                            <td><span class="keyboard-shortcut">Ctrl+N</span></td>
+                        </tr>
+                        <tr>
+                            <td>Open File</td>
+                            <td><span class="keyboard-shortcut">Ctrl+O</span></td>
+                        </tr>
+                        <tr>
+                            <td>Save</td>
+                            <td><span class="keyboard-shortcut">Ctrl+S</span></td>
+                        </tr>
+                        <tr>
+                            <td>Save All</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Shift+S</span></td>
+                        </tr>
+                        <tr>
+                            <td>Close Tab</td>
+                            <td><span class="keyboard-shortcut">Ctrl+W</span></td>
+                        </tr>
+                        <tr>
+                            <td>Undo</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Z</span></td>
+                        </tr>
+                        <tr>
+                            <td>Redo</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Y</span> or <span class="keyboard-shortcut">Ctrl+Shift+Z</span></td>
+                        </tr>
+                        <tr>
+                            <td>Cut</td>
+                            <td><span class="keyboard-shortcut">Ctrl+X</span></td>
+                        </tr>
+                        <tr>
+                            <td>Copy</td>
+                            <td><span class="keyboard-shortcut">Ctrl+C</span></td>
+                        </tr>
+                        <tr>
+                            <td>Paste</td>
+                            <td><span class="keyboard-shortcut">Ctrl+V</span></td>
+                        </tr>
+                        <tr>
+                            <td>Find</td>
+                            <td><span class="keyboard-shortcut">Ctrl+F</span></td>
+                        </tr>
+                        <tr>
+                            <td>Replace</td>
+                            <td><span class="keyboard-shortcut">Ctrl+H</span></td>
+                        </tr>
+                        <tr>
+                            <td>Find in Files</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Shift+F</span></td>
+                        </tr>
+                        <tr>
+                            <td>Go to Line</td>
+                            <td><span class="keyboard-shortcut">Ctrl+G</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Editor Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Shortcut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Comment Line(s)</td>
+                            <td><span class="keyboard-shortcut">Ctrl+/</span></td>
+                        </tr>
+                        <tr>
+                            <td>Block Comment</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Shift+/</span></td>
+                        </tr>
+                        <tr>
+                            <td>Duplicate Line</td>
+                            <td><span class="keyboard-shortcut">Ctrl+D</span></td>
+                        </tr>
+                        <tr>
+                            <td>Delete Line</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Y</span> or <span class="keyboard-shortcut">Ctrl+Shift+K</span></td>
+                        </tr>
+                        <tr>
+                            <td>Move Line Up</td>
+                            <td><span class="keyboard-shortcut">Alt+Up</span></td>
+                        </tr>
+                        <tr>
+                            <td>Move Line Down</td>
+                            <td><span class="keyboard-shortcut">Alt+Down</span></td>
+                        </tr>
+                        <tr>
+                            <td>Indent</td>
+                            <td><span class="keyboard-shortcut">Tab</span></td>
+                        </tr>
+                        <tr>
+                            <td>Unindent</td>
+                            <td><span class="keyboard-shortcut">Shift+Tab</span></td>
+                        </tr>
+                        <tr>
+                            <td>Code Completion</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Space</span></td>
+                        </tr>
+                        <tr>
+                            <td>Parameter Info</td>
+                            <td><span class="keyboard-shortcut">Ctrl+P</span></td>
+                        </tr>
+                        <tr>
+                            <td>Quick Documentation</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Q</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Build and Debug Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Shortcut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Build Current File</td>
+                            <td><span class="keyboard-shortcut">F7</span></td>
+                        </tr>
+                        <tr>
+                            <td>Build Project</td>
+                            <td><span class="keyboard-shortcut">Ctrl+F7</span></td>
+                        </tr>
+                        <tr>
+                            <td>Run</td>
+                            <td><span class="keyboard-shortcut">F5</span></td>
+                        </tr>
+                        <tr>
+                            <td>Debug</td>
+                            <td><span class="keyboard-shortcut">F9</span></td>
+                        </tr>
+                        <tr>
+                            <td>Step Over</td>
+                            <td><span class="keyboard-shortcut">F8</span></td>
+                        </tr>
+                        <tr>
+                            <td>Step Into</td>
+                            <td><span class="keyboard-shortcut">F7</span></td>
+                        </tr>
+                        <tr>
+                            <td>Step Out</td>
+                            <td><span class="keyboard-shortcut">Shift+F8</span></td>
+                        </tr>
+                        <tr>
+                            <td>Stop Execution</td>
+                            <td><span class="keyboard-shortcut">Shift+F5</span></td>
+                        </tr>
+                        <tr>
+                            <td>Toggle Breakpoint</td>
+                            <td><span class="keyboard-shortcut">F12</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Navigation Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Shortcut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Go to File</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Shift+N</span></td>
+                        </tr>
+                        <tr>
+                            <td>Go to Definition</td>
+                            <td><span class="keyboard-shortcut">F12</span> or <span class="keyboard-shortcut">Ctrl+Click</span></td>
+                        </tr>
+                        <tr>
+                            <td>Go to Line</td>
+                            <td><span class="keyboard-shortcut">Ctrl+G</span></td>
+                        </tr>
+                        <tr>
+                            <td>Navigate Back</td>
+                            <td><span class="keyboard-shortcut">Alt+Left</span></td>
+                        </tr>
+                        <tr>
+                            <td>Navigate Forward</td>
+                            <td><span class="keyboard-shortcut">Alt+Right</span></td>
+                        </tr>
+                        <tr>
+                            <td>Next Tab</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Tab</span></td>
+                        </tr>
+                        <tr>
+                            <td>Previous Tab</td>
+                            <td><span class="keyboard-shortcut">Ctrl+Shift+Tab</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Customizing Shortcuts</h3>
+                <p>
+                    You can customize keyboard shortcuts to match your preferences or other familiar IDEs:
+                </p>
+                <ol>
+                    <li>Open the Settings dialog (<span class="keyboard-shortcut">Ctrl+Alt+S</span>)</li>
+                    <li>Navigate to the <code>Keymap</code> section</li>
+                    <li>Select a predefined keymap or customize individual shortcuts</li>
+                    <li>To change a shortcut, right-click on the action and select <code>Add Keyboard Shortcut</code></li>
+                </ol>
+
+                <div class="alert alert-info">
+                    <p>SystemScript IDE includes predefined keymaps for popular environments like Visual Studio, Eclipse, and Emacs to help you transition smoothly.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 id="plugins">Plugins</h2>
+                
+                <p>
+                    Extend the functionality of SystemScript IDE with plugins developed by the community and official developers.
+                </p>
+                
+                <h3>Managing Plugins</h3>
+                <p>
+                    Access the plugin manager through:
+                </p>
+                <ol>
+                    <li>Select <code>Tools → Plugins</code> from the menu bar</li>
+                    <li>Browse through available plugins in the <code>Marketplace</code> tab</li>
+                    <li>View and manage installed plugins in the <code>Installed</code> tab</li>
+                </ol>
+
+                <h3>Installing Plugins</h3>
+                <p>
+                    There are multiple ways to install plugins:
+                </p>
+                <h4>From the Marketplace</h4>
+                <ol>
+                    <li>Open the Plugin Manager</li>
+                    <li>Navigate to the <code>Marketplace</code> tab</li>
+                    <li>Search for a plugin or browse categories</li>
+                    <li>Click <code>Install</code> on the plugin you want to add</li>
+                </ol>
+
+                <h4>From a File</h4>
+                <ol>
+                    <li>Open the Plugin Manager</li>
+                    <li>Click <code>Install Plugin from Disk...</code></li>
+                    <li>Browse to the plugin file (typically <code>.ssplug</code> or <code>.zip</code>)</li>
+                    <li>Select the file and click <code>Open</code></li>
+                </ol>
+
+                <h3>Popular Plugins</h3>
+                <div class="card">
+                    <h3>Essential Plugins for SystemScript Development</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plugin</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SystemScript Formatter</td>
+                                <td>Advanced code formatting for SystemScript with customizable rules</td>
+                            </tr>
+                            <tr>
+                                <td>Git Integration</td>
+                                <td>Integrated version control with Git commands directly in the IDE</td>
+                            </tr>
+                            <tr>
+                                <td>Project Templates</td>
+                                <td>Additional project templates for specific application types</td>
+                            </tr>
+                            <tr>
+                                <td>Code Metrics</td>
+                                <td>Tools for measuring code complexity and quality</td>
+                            </tr>
+                            <tr>
+                                <td>Low-Level Debugger</td>
+                                <td>Enhanced debugging tools for system-level code</td>
+                            </tr>
+                            <tr>
+                                <td>Memory Profiler</td>
+                                <td>Analyze memory usage and detect leaks in SystemScript programs</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Developing Plugins</h3>
+                <p>
+                    Create your own plugins for SystemScript IDE with the Plugin Development Kit (PDK):
+                </p>
+                <ol>
+                    <li>Download the PDK from the official website</li>
+                    <li>Use the plugin template provided with the PDK</li>
+                    <li>Implement your functionality using the provided APIs</li>
+                    <li>Package your plugin as a <code>.ssplug</code> file</li>
+                    <li>Test it locally before sharing with others</li>
+                </ol>
+
+                <p>
+                    For detailed documentation on plugin development, refer to the <a href="#">Plugin Development Guide</a>.
+                </p>
+            </div>
+            
+            <div class="section">
+                <h2 id="snippets">Code Snippets</h2>
+                
+                <p>
+                    SystemScript IDE includes a powerful code snippet system to speed up coding by quickly inserting common code patterns.
+                </p>
+                
+                <h3>Using Snippets</h3>
+                <p>
+                    To use a snippet:
+                </p>
+                <ol>
+                    <li>Type the snippet shortcode in the editor</li>
+                    <li>Press <span class="keyboard-shortcut">Tab</span> to expand the snippet</li>
+                    <li>Use <span class="keyboard-shortcut">Tab</span> to navigate between template fields</li>
+                </ol>
+
+                <h3>Default Snippets</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Shortcode</th>
+                            <th>Description</th>
+                            <th>Example Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>main</code></td>
+                            <td>Main function template</td>
+                            <td><pre><code>fn main() -> i32 {
+    // cursor position
+    return 0;
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>fn</code></td>
+                            <td>Function declaration</td>
+                            <td><pre><code>fn name(args) -> return_type {
+    // cursor position
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>if</code></td>
+                            <td>If statement</td>
+                            <td><pre><code>if (condition) {
+    // cursor position
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>ifelse</code></td>
+                            <td>If-else statement</td>
+                            <td><pre><code>if (condition) {
+    // cursor position
+} else {
+    
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>for</code></td>
+                            <td>For loop</td>
+                            <td><pre><code>for (let i = 0; i < max; i++) {
+    // cursor position
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>while</code></td>
+                            <td>While loop</td>
+                            <td><pre><code>while (condition) {
+    // cursor position
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>struct</code></td>
+                            <td>Struct declaration</td>
+                            <td><pre><code>struct Name {
+    // cursor position
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>enum</code></td>
+                            <td>Enum declaration</td>
+                            <td><pre><code>enum Name {
+    // cursor position
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>module</code></td>
+                            <td>Module declaration</td>
+                            <td><pre><code>module name;
+
+import system.io;
+
+// cursor position</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>try</code></td>
+                            <td>Try-catch block</td>
+                            <td><pre><code>try {
+    // cursor position
+} catch (Error err) {
+    
+}</code></pre></td>
+                        </tr>
+                        <tr>
+                            <td><code>switch</code></td>
+                            <td>Switch statement</td>
+                            <td><pre><code>switch (expr) {
+    case case1:
+        // cursor position
+        break;
+    case case2:
+        
+        break;
+    default:
+        
+        break;
+}</code></pre></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Creating Custom Snippets</h3>
+                <p>
+                    You can create your own snippets to automate repetitive coding patterns:
+                </p>
+                <ol>
+                    <li>Select <code>Tools → Snippets</code> from the menu bar</li>
+                    <li>Click <code>Add Snippet</code> in the dialog</li>
+                    <li>Enter a shortcode, description, and the snippet content</li>
+                    <li>Use <code>$CURSOR</code> to define the cursor position after expansion</li>
+                    <li>Use <code>$NAME</code> style placeholders for template fields</li>
+                </ol>
+
+                <div class="alert alert-info">
+                    <p>Snippets are stored in <code>~/.systemscript-ide/snippets/</code> as individual files and can be shared between team members for consistent coding patterns.</p>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 id="common-issues">Common Issues</h2>
+                
+                <p>
+                    This section covers solutions for common issues you might encounter while using SystemScript IDE.
+                </p>
+                
+                <h3>Startup Issues</h3>
+                <div class="card">
+                    <h3>IDE Won't Start</h3>
+                    <ol>
+                        <li><strong>Check Prerequisites:</strong> Ensure your system meets the minimum requirements</li>
+                        <li><strong>Verify Installation:</strong> Reinstall if necessary</li>
+                        <li><strong>Check Logs:</strong> Examine logs in <code>~/.systemscript-ide/logs/</code></li>
+                        <li><strong>Reset Configuration:</strong> Rename or delete <code>~/.systemscript-ide/config.json</code></li>
+                    </ol>
+                </div>
+
+                <h3>Editor Issues</h3>
+                <div class="card">
+                    <h3>Syntax Highlighting Not Working</h3>
+                    <ol>
+                        <li><strong>Verify File Type:</strong> Ensure the file has the correct <code>.ss</code> extension</li>
+                        <li><strong>Check Theme:</strong> Try switching to the default theme in Settings</li>
+                        <li><strong>Reset Editor Settings:</strong> Go to <code>Tools → Settings → Editor</code> and reset to defaults</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>Code Completion Not Working</h3>
+                    <ol>
+                        <li><strong>Check If Enabled:</strong> Verify in <code>Tools → Settings → Editor → Auto-completion</code></li>
+                        <li><strong>Trigger Manually:</strong> Try pressing <span class="keyboard-shortcut">Ctrl+Space</span></li>
+                        <li><strong>Project Structure:</strong> Ensure proper imports and project structure</li>
+                        <li><strong>Reset Cache:</strong> Select <code>Tools → Reset Caches</code></li>
+                    </ol>
+                </div>
+
+                <h3>Build Issues</h3>
+                <div class="card">
+                    <h3>Compiler Not Found</h3>
+                    <ol>
+                        <li><strong>Check Compiler Path:</strong> Verify in <code>Tools → Settings → Compiler</code></li>
+                        <li><strong>Use Built-in Compiler:</strong> Enable the built-in compiler option</li>
+                        <li><strong>Environment Variables:</strong> Check if compiler directory is in your PATH</li>
+                    </ol>
+                </div>
+
+                <div class="card">
+                    <h3>Build Fails with No Error Message</h3>
+                    <ol>
+                        <li><strong>Check Output Panel:</strong> Look for errors in the Build tab</li>
+                        <li><strong>Examine Build Flags:</strong> Some flags may cause silent failures</li>
+                        <li><strong>File Permissions:</strong> Ensure write permissions for the build directory</li>
+                        <li><strong>External Dependencies:</strong> Verify all required libraries are available</li>
+                    </ol>
+                </div>
+
+                <h3>Performance Issues</h3>
+                <div class="card">
+                    <h3>IDE Running Slowly</h3>
+                    <ol>
+                        <li><strong>Close Unused Projects:</strong> Multiple open projects consume resources</li>
+                        <li><strong>Disable Plugins:</strong> Temporarily disable non-essential plugins</li>
+                        <li><strong>Increase Memory Allocation:</strong> Edit <code>systemscript-ide.ini</code> to allocate more memory</li>
+                        <li><strong>Clear Caches:</strong> Select <code>Tools → Reset Caches and Restart</code></li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 id="error-codes">Error Codes</h2>
+                
+                <p>
+                    SystemScript IDE may display error codes during operation. This section explains common error codes and their solutions.
+                </p>
+                
+                <h3>IDE Error Codes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Error Code</th>
+                            <th>Description</th>
+                            <th>Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>IDE001</td>
+                            <td>Configuration file corrupted</td>
+                            <td>Delete or rename <code>~/.systemscript-ide/config.json</code> and restart</td>
+                        </tr>
+                        <tr>
+                            <td>IDE002</td>
+                            <td>Plugin load failure</td>
+                            <td>Disable problematic plugin in safe mode or delete from plugins directory</td>
+                        </tr>
+                        <tr>
+                            <td>IDE003</td>
+                            <td>Project file format error</td>
+                            <td>Ensure <code>project.json</code> is properly formatted</td>
+                        </tr>
+                        <tr>
+                            <td>IDE004</td>
+                            <td>Insufficient permissions</td>
+                            <td>Run the IDE with appropriate permissions or fix file/directory permissions</td>
+                        </tr>
+                        <tr>
+                            <td>IDE005</td>
+                            <td>Memory allocation error</td>
+                            <td>Increase available memory or reduce project size</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Compiler Error Codes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Error Code</th>
+                            <th>Description</th>
+                            <th>Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SSC001</td>
+                            <td>Syntax error</td>
+                            <td>Check syntax at indicated location</td>
+                        </tr>
+                        <tr>
+                            <td>SSC002</td>
+                            <td>Undefined symbol</td>
+                            <td>Ensure all variables and functions are properly declared</td>
+                        </tr>
+                        <tr>
+                            <td>SSC003</td>
+                            <td>Type mismatch</td>
+                            <td>Verify type compatibility in operations</td>
+                        </tr>
+                        <tr>
+                            <td>SSC004</td>
+                            <td>Module not found</td>
+                            <td>Check import paths and module availability</td>
+                        </tr>
+                        <tr>
+                            <td>SSC005</td>
+                            <td>Memory safety violation</td>
+                            <td>Fix unsafe memory access or use appropriate safety annotations</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Runtime Error Codes</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Error Code</th>
+                            <th>Description</th>
+                            <th>Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SSR001</td>
+                            <td>Null pointer dereference</td>
+                            <td>Add null checks before accessing pointers</td>
+                        </tr>
+                        <tr>
+                            <td>SSR002</td>
+                            <td>Out of bounds access</td>
+                            <td>Ensure array indices are within valid range</td>
+                        </tr>
+                        <tr>
+                            <td>SSR003</td>
+                            <td>Stack overflow</td>
+                            <td>Check for infinite recursion or excessive local variables</td>
+                        </tr>
+                        <tr>
+                            <td>SSR004</td>
+                            <td>Heap memory exhaustion</td>
+                            <td>Fix memory leaks or increase available memory</td>
+                        </tr>
+                        <tr>
+                            <td>SSR005</td>
+                            <td>Division by zero</td>
+                            <td>Add validation before division operations</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2 id="performance-tips">Performance Tips</h2>
+                
+                <p>
+                    Optimize your SystemScript IDE experience with these performance tips.
+                </p>
+                
+                <h3>IDE Optimization</h3>
+                <div class="card">
+                    <h3>Improving IDE Performance</h3>
+                    <ul>
+                        <li>
+                            <strong>Adjust Memory Allocation</strong>
+                            <p>Increase memory allocation in <code>systemscript-ide.ini</code> by setting <code>-Xmx</code> to a higher value, such as <code>-Xmx2048m</code> for 2GB.</p>
+                        </li>
+                        <li>
+                            <strong>Disable Unused Plugins</strong>
+                            <p>Disable plugins you don't regularly use to reduce startup time and resource usage.</p>
+                        </li>
+                        <li>
+                            <strong>Optimize Project Size</strong>
+                            <p>Break very large projects into smaller modules. Mark source roots correctly to improve indexing.</p>
+                        </li>
+                        <li>
+                            <strong>Configure Auto-Save</strong>
+                            <p>Adjust auto-save frequency to balance between data safety and performance.</p>
+                        </li>
+                        <li>
+                            <strong>Use Local History Judiciously</strong>
+                            <p>Configure local history to keep fewer revisions if disk space is limited.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Editor Optimization</h3>
+                <div class="card">
+                    <h3>Speeding Up the Editor</h3>
+                    <ul>
+                        <li>
+                            <strong>Disable Real-time Code Analysis</strong>
+                            <p>For very large files, consider disabling real-time code analysis in <code>Tools → Settings → Editor → Code Analysis</code>.</p>
+                        </li>
+                        <li>
+                            <strong>Limit Syntax Highlighting</strong>
+                            <p>For extremely large files, you can disable syntax highlighting by right-clicking the editor tab and selecting <code>Disable Syntax Highlighting</code>.</p>
+                        </li>
+                        <li>
+                            <strong>Optimize Font Rendering</strong>
+                            <p>Some fonts perform better than others. JetBrains Mono and Source Code Pro are optimized for IDE use.</p>
+                        </li>
+                        <li>
+                            <strong>Disable Minimap for Large Files</strong>
+                            <p>The minimap can consume resources for very large files. Disable it in <code>Tools → Settings → Editor</code>.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Building and Running</h3>
+                <div class="card">
+                    <h3>Optimizing Build and Run Performance</h3>
+                    <ul>
+                        <li>
+                            <strong>Use Incremental Builds</strong>
+                            <p>Enable incremental builds in project settings to rebuild only modified files.</p>
+                        </li>
+                        <li>
+                            <strong>Configure Output Filtering</strong>
+                            <p>Filter unnecessary output in the build console to improve performance during builds with verbose output.</p>
+                        </li>
+                        <li>
+                            <strong>Use Build Cache</strong>
+                            <p>Enable compiler cache in <code>Tools → Settings → Compiler → Advanced</code> to speed up repeated builds.</p>
+                        </li>
+                        <li>
+                            <strong>Optimize Run Configurations</strong>
+                            <p>Configure run configurations to use appropriate memory settings for your applications.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3>Hardware Recommendations</h3>
+                <p>
+                    For optimal performance with large projects, consider these hardware recommendations:
+                </p>
+                <ul>
+                    <li><strong>CPU:</strong> Modern multi-core processor (4+ cores recommended)</li>
+                    <li><strong>RAM:</strong> 16GB or more for large projects</li>
+                    <li><strong>Storage:</strong> SSD with at least 500MB/s read/write speeds</li>
+                    <li><strong>Graphics:</strong> Dedicated GPU can help with UI rendering</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdowns = document.querySelectorAll('.dropdown-toggle');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', function() {
+                    this.parentElement.classList.toggle('open');
+                });
+            });
+            
+            const navToggle = document.querySelector('.nav-toggle');
+            const nav = document.querySelector('nav');
+            if (navToggle) {
+                navToggle.addEventListener('click', function() {
+                    nav.classList.toggle('open');
+                });
+            }
+            
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', function() {
+                    document.body.classList.toggle('light-mode');
+                    const icon = this.querySelector('span');
+                    if (icon.classList.contains('icon-moon')) {
+                        icon.classList.remove('icon-moon');
+                        icon.classList.add('icon-sun');
+                    } else {
+                        icon.classList.remove('icon-sun');
+                        icon.classList.add('icon-moon');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const owner = 'CPScript';
+            const repo = 'SystemScript';
+            const repoUrl = `https://github.com/${owner}/${repo}`;
+
+            const downloadButton = document.querySelector('.header-button:first-of-type');
+            if (downloadButton) {
+                downloadButton.addEventListener('click', function() {
+                    const originalText = downloadButton.innerHTML;
+                    downloadButton.innerHTML = '<span class="icon-download"></span> Fetching release...';
+                    downloadButton.disabled = true;
+
+                    fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('GitHub API request failed');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.assets && data.assets.length > 0) {
+                                const asset = data.assets[0];
+                                const downloadUrl = asset.browser_download_url;
+
+                                const downloadLink = document.createElement('a');
+                                downloadLink.href = downloadUrl;
+                                downloadLink.download = asset.name;
+                                downloadLink.style.display = 'none';
+                                document.body.appendChild(downloadLink);
+                                downloadLink.click();
+                                document.body.removeChild(downloadLink);
+
+                                downloadButton.innerHTML = `<span class="icon-download"></span> Download IDE (V: ${data.tag_name})`;
+                            } else {
+                                throw new Error('No download assets found');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Download error:', error);
+                            window.open(`${repoUrl}/releases/latest`, '_blank');
+                            downloadButton.innerHTML = originalText;
+                        })
+                        .finally(() => {
+                            downloadButton.disabled = false;
+                        });
+                });
+            }
+
+            const githubButton = document.querySelector('.header-button:last-of-type');
+            if (githubButton) {
+                githubButton.addEventListener('click', function() {
+                    window.open(repoUrl, '_blank');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
