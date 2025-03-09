@@ -3913,20 +3913,12 @@ project "MyProject" {
         } else {
             console.error('GitHub button not found');
         }
-        
-        // Add click event listener for Download button
+
+        // Add click event listener for Dowanload button
         if (downloadButton) {
             downloadButton.addEventListener('click', function() {
-                // Create temporary link element
-                const downloadLink = document.createElement('a');
-                downloadLink.href = downloadUrl;
-                downloadLink.download = 'ssIDE.zip';
-                
-                // Append to body, click, and remove
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-                console.log('Downloading from:', downloadUrl);
+                window.open(downloadUrl, '_blank');
+                console.log('Switching page:', downloadUrl);
             });
         } else {
             console.error('Download button not found');
