@@ -3906,12 +3906,11 @@ project "MyProject" {
             downloadButton.addEventListener('click', function() {
                 const downloadLink = document.createElement('a');
                 downloadLink.href = downloadUrl;
-                downloadLink.download = 'ssIDE.zip';
                 
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
-                console.log('Downloading from:', downloadUrl);
+                console.log('Switching to:', downloadUrl);
             });
         } else {
             console.error('Download button not found');
