@@ -2126,7 +2126,7 @@ import system.io;
                     downloadButton.innerHTML = '<span class="icon-download"></span> Fetching release...';
                     downloadButton.disabled = true;
 
-                    fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`)
+                    fetch(`https://github.com/${owner}/${repo}/releases`)
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('GitHub API request failed');
