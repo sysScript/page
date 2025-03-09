@@ -2114,60 +2114,46 @@ import system.io;
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const owner = 'CPScript';    
-        const repo = 'SystemScript';
-        const repoUrl = `https://github.com/${owner}/${repo}`;
+        const headerButtons = document.querySelectorAll('.header-button');
         
-        const downloadButton = document.querySelector('.header-button:first-of-type');
+        let downloadButton = null;
+        let githubButton = null;
+        
+        headerButtons.forEach(button => {
+            if (button.textContent.includes('Download')) {
+                downloadButton = button;
+            } else if (button.textContent.includes('GitHub')) {
+                githubButton = button;
+            }
+        });
+        
+        const githubRepoUrl = 'https://github.com/CPScript/SystemScript';
+        
+        const downloadUrl = 'https://github.com/CPScript/SystemScript/releases/tag/beta-2.0';
+        
         if (downloadButton) {
             downloadButton.addEventListener('click', function() {
-                const originalText = downloadButton.innerHTML;
-                downloadButton.innerHTML = '<span class="icon-download"></span> Fetching release...';
-                downloadButton.disabled = true;
-                
-                fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('GitHub API request failed');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.assets && data.assets.length > 0) {
-                            const asset = data.assets[0];
-                            const downloadUrl = asset.browser_download_url;
-                                
-                            const downloadLink = document.createElement('a');
-                            downloadLink.href = downloadUrl;
-                            downloadLink.download = asset.name;
-                            downloadLink.style.display = 'none';
-                            document.body.appendChild(downloadLink);
-                            downloadLink.click();
-                            document.body.removeChild(downloadLink);
-                            
-                            downloadButton.innerHTML = `<span class="icon-download"></span> Download IDE (V: ${data.tag_name})`;
-                        } else {
-                            throw new Error('No download assets found');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Download error:', error);
-                        window.open(`${repoUrl}/releases/latest`, '_blank');
-                        downloadButton.innerHTML = originalText;
-                    })
-                    .finally(() => {
-                        downloadButton.disabled = false;
-                    });
+                window.location.href = downloadUrl;
+                console.log('Switching page:', downloadUrl);
             });
+        } else {
+            console.error('Download button not found');
         }
         
-        const githubButton = document.querySelector('.header-button:last-of-type');
-        if (githubButton) {
-            githubButton.addEventListener('click', function() {
-                window.open(repoUrl, '_blank');
+        if (downloadButton) {
+            downloadButton.addEventListener('click', function() {
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                console.log('Switching to:', downloadUrl);
             });
+        } else {
+            console.error('Download button not found');
         }
     });
-</script>
+    </script>
 </body>
 </html>
