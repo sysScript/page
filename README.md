@@ -1,4 +1,4 @@
-# V: Beta
+# V: 1.0
 
 All "Pull Requests" are accepted.
 
